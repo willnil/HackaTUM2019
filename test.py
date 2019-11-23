@@ -13,7 +13,7 @@ def main():
     # yield 4.4 ==> ~99.99%
     #my_dut = DUT(None,True,3.8)
     # my_dut = DUT()
-    my_dut = DUT(1,True,4)
+    my_dut = DUT(None,True,3.8)
 
     meastime, nmeas, nport, meas, ports, expyield = my_dut.info()
     print("DUT: meas. time= ", meastime, " | measurements= ", nmeas, " | ports= ", nport, " | expected yield = ", expyield)
@@ -24,24 +24,26 @@ def main():
     t=0
     array_to_sort = []
     sorted_new_order = []
-    
+    ndut = 10000
+    t_1 = t_2 = 0
 
     data= {}
     data['component']=[]
 
 
-    for x in range(10000):
+    for x in range(ndut):
         my_dut.new_dut()
         dut={}
         dut['dut_id'] = x
         dut['measurements']=[]
-
+            
         if x % 500 == 0:
             my_dut.calibrate()
 
         for i in range(0, nmeas):
             if x == 0:
                 t, result, dist = my_dut.gen_meas_idx(i)
+                time = t
                 measurement = {}
                 measurement['m_id'] = i
                 measurement['m_time'] = meas[i].meas_time
@@ -83,14 +85,19 @@ def main():
     
     outfile2 = open('meas.json', 'w')
     json.dump(sorted_new_order, outfile2, indent = 0)
-
+    
+    cal_time = (time - meastime - 0.1)
+    not_opt = ((meastime + 0.1)*ndut) + (cal_time * 20)
+    improvement = not_opt - t
+    print ("Percent Time Improvement:", (improvement/not_opt)*100, "%")
+    print ("Percentage Accuracy", (error_dut/error_meas)*100, "%")
 
     # plot results
     timeAxis = [x / 3600. for x in X]
     plt.xlabel('time [h]')
     plt.plot(timeAxis,Y)
     plt.axhline(y=1., xmin=0, xmax=1, color='r')
-    plt.show()
+    plt.show();
     
 if __name__ == "__main__":
     # execute only if run as a script
