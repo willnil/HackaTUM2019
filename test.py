@@ -11,7 +11,7 @@ def main():
     # yield 4.4 ==> ~99.99%
     # my_dut = DUT(None,True,3.8)
     # my_dut = DUT()
-    my_dut = DUT(True, True, 4.1)
+    my_dut = DUT(None, True, 4.1)
 
     meastime, nmeas, nport, meas, ports, expyield = my_dut.info()
     print("DUT: meas. time= ", meastime, " | measurements= ", nmeas, " | ports= ", nport, " | expected yield = ",
