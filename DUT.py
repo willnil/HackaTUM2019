@@ -146,6 +146,7 @@ class DUT:
         print("Calibration at ",self.measurement_time, " took ", caltime, " seconds.")
         self.measurement_time += caltime
         self.lastCal = self.measurement_time
+        return caltime
 
     def gen_meas(self):
         """
