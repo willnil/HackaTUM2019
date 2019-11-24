@@ -13,11 +13,16 @@ def main():
     # my_dut = DUT(None,True,3.8)
     # my_dut = DUT()
 
-    calibration_interval_arr = np.arange(50, 1360, 100)
+    calibration_interval_arr = np.arange(200, 1000, 50)
     output_DUT_array = []
 
+    # Khanh's Variables
+    performance_arr = []
+    wPerform = 5;
+    wFalse = 1;
+
     def init_dut():
-        dut_init = DUT(4, True, 3)
+        dut_init = DUT(5, True, 3)
         return dut_init
 
     data = {'component': []}
@@ -83,14 +88,58 @@ def main():
               error_meas, " ) ==> ",
               (x + 1 - error_count) / (x + 1))
 
-        # plot results
+        # Evaluating performance through amount of successful tested DUT and correctly faulty DUT
+        performance_arr.append(x - error_count);
 
     new_result = output_DUT_array[np.argmax(np.array(output_DUT_array))]
     old_result = initial_test(init_dut())
+    best_calib = 200 + 50 * output_DUT_array.index(new_result)
     print("new result: ", new_result)
     print("old result: ", old_result)
     improvement = new_result / old_result
     print(improvement)
+    print(best_calib)
+
+
+        # plot results
+    # Khanh
+
+    # Calculating cost function
+    gewinn = []
+    for i in range(len(calibration_interval_arr)):
+        tmp = 5 * performance_arr[i] - failed_DUT_count_arr[i]
+        gewinn.append(tmp)
+
+    # 1st Subplot
+    fig, axs = plt.subplots(2, 1, constrained_layout=True)
+    axs[0].plot(calibration_interval_arr, performance_arr, 'b-')
+    axs[0].set_title('Amount of Tested DUT vs Wrong Measurements')
+    axs[0].set_xlabel('recalibration_interval')
+    axs[0].set_ylabel('Performance', color='b')
+    ax2 = axs[0].twinx()
+    #plt.vlines(x = best_calib, ymin = min(output_DUT_array), ymax=max(output_DUT_array), color='blue')
+    ax2.plot(calibration_interval_arr, failed_DUT_count_arr, 'r')
+    ax2.set_ylabel('failed_DUT', color='r')
+    #ax2.set_ylim(0, 100)
+    ax2.tick_params('y', colors='r')
+    fig.tight_layout()
+
+    # 2nd Subplot
+    axs[1].plot(calibration_interval_arr, gewinn, 'g-')
+    axs[1].set_title('Profit depends on calibration interval')
+    axs[1].set_xlabel('recalibration_interval')
+    axs[1].set_ylabel('Profit', color='g')
+    axs[1].tick_params('y', colors='g')
+    axs[1].legend(['W1 * Performances - W2 * Wrong Measurements', 'W1 = ', wPerform, 'W2 = ', wFalse])
+    fig.tight_layout()
+
+    # Screen Output
+    plt.show();
+
+
+    # End Khanh
+
+
 
 
 if __name__ == "__main__":
