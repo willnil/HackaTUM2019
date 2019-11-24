@@ -63,7 +63,7 @@ class DUT:
             np.random.seed(seed)
 
         self.usePort = usePort
-        self.exp_yield =  expYield if expYield is not None else np.random.randint(3, 4.4)
+        self.exp_yield = expYield if expYield is not None else np.random.randint(3, 4.4)
         self.numMeas = np.random.randint(10, 50)
         self.numPorts = np.random.randint(1, 6) * 4
         self.lastCal = 0
@@ -79,8 +79,8 @@ class DUT:
             p_a = self.meas[idx].port_a
             p_b = self.meas[idx].port_b
             meas_time = self.meas[idx].meas_time
-            self.ports[p_a].set_longest_meas_time( meas_time )
-            self.ports[p_b].set_longest_meas_time( meas_time )
+            self.ports[p_a].set_longest_meas_time(meas_time)
+            self.ports[p_b].set_longest_meas_time(meas_time)
             self.DutMeasTime += meas_time
 
         # count used ports
@@ -143,7 +143,7 @@ class DUT:
             caltime += 4*self.ports[idx].longest_measurement_time
         # add 30 seconds per port for connecting
         caltime += self.portcountused * 30
-        print("Calibration at ",self.measurement_time, " took ", caltime, " seconds.")
+        print("Calibration at ", self.measurement_time, " took ", caltime, " seconds.")
         self.measurement_time += caltime
         self.lastCal = self.measurement_time
 
