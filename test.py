@@ -22,7 +22,8 @@ def main():
     wFalse = 1;
 
     def init_dut():
-        dut_init = DUT(5, True, 3)
+        mySeed = 8
+        dut_init = DUT(mySeed, True, 3)
         return dut_init
 
     data = {'component': []}
@@ -112,25 +113,25 @@ def main():
 
     # 1st Subplot
     fig, axs = plt.subplots(2, 1, constrained_layout=True)
-    axs[0].plot(calibration_interval_arr, performance_arr, 'b-')
-    axs[0].set_title('Amount of Tested DUT vs Wrong Measurements')
+    axs[0].plot(calibration_interval_arr, performance_arr, 'or', calibration_interval_arr, performance_arr, 'b-')
+    axs[0].set_title('Amount of Tested DUT vs Wrong Measurements.')
     axs[0].set_xlabel('recalibration_interval')
     axs[0].set_ylabel('Performance', color='b')
     ax2 = axs[0].twinx()
     #plt.vlines(x = best_calib, ymin = min(output_DUT_array), ymax=max(output_DUT_array), color='blue')
-    ax2.plot(calibration_interval_arr, failed_DUT_count_arr, 'r')
+    ax2.plot(calibration_interval_arr, failed_DUT_count_arr, 'o', calibration_interval_arr, failed_DUT_count_arr, '-')
     ax2.set_ylabel('failed_DUT', color='r')
     #ax2.set_ylim(0, 100)
     ax2.tick_params('y', colors='r')
     fig.tight_layout()
 
     # 2nd Subplot
-    axs[1].plot(calibration_interval_arr, gewinn, 'g-')
+    axs[1].plot(calibration_interval_arr, gewinn, 'g-', calibration_interval_arr, gewinn, 'o')
     axs[1].set_title('Profit depends on calibration interval')
     axs[1].set_xlabel('recalibration_interval')
     axs[1].set_ylabel('Profit', color='g')
     axs[1].tick_params('y', colors='g')
-    axs[1].legend(['W1 * Performances - W2 * Wrong Measurements', 'W1 = ', wPerform, 'W2 = ', wFalse])
+    axs[1].legend(['W1 * Performances - W2 * Wrong Measurements', 'W1 = %d, W2 = %d' % (wPerform, wFalse)])
     fig.tight_layout()
 
     # Screen Output
